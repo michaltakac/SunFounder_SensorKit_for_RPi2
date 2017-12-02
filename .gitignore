@@ -1,2 +1,14 @@
 *.pyc
 a.out
+.vscode/
+.idea/
+node_modules
+.DS_Store
+npm-debug.log
+dist/
+/*.log
+/target
+/*-init.clj
+/resources/public/js/compiled
+out
+.lein-failures
