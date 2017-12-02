@@ -9,18 +9,6 @@ DO = 17
 GPIO.setmode(GPIO.BCM)
 cl = []
 
-class SocketHandler(websocket.WebSocketHandler):
-    def check_origin(self, origin):
-        return True
-
-    def open(self):
-        if self not in cl:
-            cl.append(self)
-
-    def on_close(self):
-        if self in cl:
-            cl.remove(self)
-
 def setup():
   ADC.setup(0x48)
   GPIO.setup(DO, GPIO.IN)
@@ -33,15 +21,29 @@ def loop():
 
     time.sleep(0.2)
 
+class SocketHandler(websocket.WebSocketHandler):
+    def check_origin(self, origin):
+        return True
+
+    def open(self):
+        if self not in cl:
+            cl.append(self)
+            loop()
+
+    def on_close(self):
+        if self in cl:
+            cl.remove(self)
+
 app = web.Application([
     (r'/ws', SocketHandler),
 ])
 
+
 if __name__ == '__main__':
   try:
     setup()
-    loop()
     app.listen(8888)
     ioloop.IOLoop.instance().start()
+    #loop()
   except KeyboardInterrupt:
     pass
