@@ -22,26 +22,26 @@ class SocketHandler(websocket.WebSocketHandler):
             cl.remove(self)
 
 def setup():
-	ADC.setup(0x48)
-	GPIO.setup(DO, GPIO.IN)
+  ADC.setup(0x48)
+  GPIO.setup(DO, GPIO.IN)
 
 
 def loop():
-	status = 1
-	while True:
-		print 'Value: ', ADC.read(0)
+  status = 1
+  while True:
+    print 'Value: ', ADC.read(0)
 
-		time.sleep(0.2)
+    time.sleep(0.2)
 
 app = web.Application([
     (r'/ws', SocketHandler),
 ])
 
 if __name__ == '__main__':
-	try:
-		setup()
-		loop()
+  try:
+    setup()
+    loop()
     app.listen(8888)
     ioloop.IOLoop.instance().start()
-	except KeyboardInterrupt:
-		pass
+  except KeyboardInterrupt:
+    pass
