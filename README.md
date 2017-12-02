@@ -1,6 +1,10 @@
 ## SunFounder Sensor Kit V2.0 for RPi 2
 SunFounder Sensor Kit V2.0 for **RaspberryPi 2B**, compatible for **Rev.1 Module B/B+**, **Rev 3 Module B**
 
+Forked by [Michal Takac](https://github.com/michaltakac/). Adds additional cool stuff like websocket integration for creating real-time visualizations. This repo will also include various experiments that I'll be working on.
+
+Disclaimer: The scripts for remotely controlling the RaspberryPi you'll find here are customized for my needs and won't work for you.
+
 Quick Links:
 
  * [About SunFounder Sensor Kit V2.0](#about_this_kit)
