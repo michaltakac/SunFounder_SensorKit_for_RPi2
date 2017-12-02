@@ -18,7 +18,7 @@ def loop(ws):
   status = 1
   while True:
     print 'Value: ', ADC.read(0)
-    ws.write_message(ADC.read(0))
+    ws.write_message(str(ADC.read(0)))
     time.sleep(0.2)
 
 class SocketHandler(websocket.WebSocketHandler):
