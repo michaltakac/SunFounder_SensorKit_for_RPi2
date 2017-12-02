@@ -18,12 +18,14 @@ def loop(ws):
   status = 1
   isPlaying = True
 
-  ws.on_message(message):
+  def setPlaying(message):
     if message == 'pause':
       isPlaying = False
 
     if message == 'play':
       isPlaying = False
+
+  ws.on_message(setPlaying)
 
   while isPlaying:
     print 'Value: ', ADC.read(0)
