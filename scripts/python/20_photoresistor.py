@@ -14,11 +14,11 @@ def setup():
   GPIO.setup(DO, GPIO.IN)
 
 
-def loop():
+def loop(ws):
   status = 1
   while True:
     print 'Value: ', ADC.read(0)
-
+    ws.write_message(ADC.read(0))
     time.sleep(0.2)
 
 class SocketHandler(websocket.WebSocketHandler):
@@ -28,14 +28,14 @@ class SocketHandler(websocket.WebSocketHandler):
     def open(self):
         if self not in cl:
             cl.append(self)
-            loop()
+            loop(self)
 
     def on_close(self):
         if self in cl:
             cl.remove(self)
 
 app = web.Application([
-    (r'/ws', SocketHandler),
+    (r'/ws-photoresistor', SocketHandler),
 ])
 
 
