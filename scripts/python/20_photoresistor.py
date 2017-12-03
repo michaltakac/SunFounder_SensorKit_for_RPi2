@@ -40,11 +40,13 @@ def handle_disconnect():
 def handle_start_event():
     print('Sensor started')
     is_playing = True
+    print(is_playing)
 
 @socketio.on('sensor_stop')
 def handle_stop_event():
     print('Sensor stopped')
     is_playing = False
+    print(is_playing)
 
 def main():
     print "Server listening at http://localhost:8888"
