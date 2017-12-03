@@ -45,7 +45,7 @@ class Worker(object):
             self.unit_of_work += 1
 
             print 'Value: ', ADC.read(0)
-            self.socketio.emit('sensor_data', {'data': str(ADC.read(0))})
+            self.socketio.emit('sensor_data', {'unit': self.unit_of_work, 'value': ADC.read(0)}, namespace='/ws-photoresistor')
 
             # important to use eventlet's sleep method
             eventlet.sleep(0.5)
@@ -70,7 +70,7 @@ def connect():
 
     global worker
     worker = Worker(socketio)
-    emit("re_connect", {"msg": "connected"})
+    emit("re_connect", {"msg": "connected"}, namespace='/ws-photoresistor')
 
 @socketio.on('sensor_start')
 def start_work():
@@ -89,11 +89,7 @@ def stop_work():
     """
 
     worker.stop()
-    emit("update", {"msg": "worker has been stoppped"})
-
-@socketio.on('disconnect')
-def handle_disconnect():
-    print('Client disconnected')
+    emit("update", {"msg": "worker has been stoppped"}, namespace='/ws-photoresistor')
 
 
 def main():
