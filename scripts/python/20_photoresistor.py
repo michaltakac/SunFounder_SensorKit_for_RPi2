@@ -40,6 +40,7 @@ class Application(web.Application):
         settings = dict(
             cookie_secret="__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
             xsrf_cookies=True,
+            debug=True,
         )
         super(Application, self).__init__(handlers, **settings)
 
