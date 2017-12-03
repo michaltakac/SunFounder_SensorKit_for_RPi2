@@ -25,6 +25,8 @@
   },
   "homepage": "https://github.com/michaltakac/sensorkit#readme",
   "dependencies": {
+    "aframe": "^0.7.1",
+    "aframe-react": "^4.3.0",
     "cors": "^2.8.4",
     "cross-env": "^5.1.1",
     "css-loader": "^0.28.7",
