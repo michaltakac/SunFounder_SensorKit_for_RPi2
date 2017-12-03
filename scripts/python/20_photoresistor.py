@@ -27,8 +27,6 @@ def loop():
             print 'Value: ', ADC.read(0)
             emit('sensor_data', {'data': str(ADC.read(0))})
             time.sleep(0.2)
-        else:
-            break
 
 @socketio.on('connect')
 def handle_connect():
