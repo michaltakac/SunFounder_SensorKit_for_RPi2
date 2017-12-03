@@ -11,6 +11,8 @@ from tornado.options import define, options
 
 define("port", default=8888, help="run on the given port", type=int)
 
+LOGGER = logging.getLogger('tornado.application')
+
 DO = 17
 GPIO.setmode(GPIO.BCM)
 cl = []
@@ -54,7 +56,7 @@ class SocketHandler(websocket.WebSocketHandler):
             cl.remove(self)
 
     def on_message(self, message):
-      logging.info("got message %r", message)
+      LOGGER.debug("got message %r", message)
       if message == 'pause':
         isPlaying = False
 
