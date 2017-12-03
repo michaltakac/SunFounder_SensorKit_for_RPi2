@@ -62,7 +62,7 @@ class Worker(object):
         """
         self.switch = False
 
-@socketio.on('connect')
+@socketio.on('connect', namespace='/ws-photoresistor')
 def connect():
     """
     connect
@@ -72,7 +72,7 @@ def connect():
     worker = Worker(socketio)
     emit("re_connect", {"msg": "connected"}, namespace='/ws-photoresistor')
 
-@socketio.on('sensor_start')
+@socketio.on('sensor_start', namespace='/ws-photoresistor')
 def start_work():
     """
     trigger background thread
@@ -82,7 +82,7 @@ def start_work():
     socketio.start_background_task(target=worker.play)
     socketio.start_background_task(target=worker.do_work)
 
-@socketio.on('sensor_stop')
+@socketio.on('sensor_stop', namespace='/ws-photoresistor')
 def stop_work():
     """
     trigger background thread
