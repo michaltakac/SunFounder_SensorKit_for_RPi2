@@ -29,10 +29,9 @@ def loop(ws):
     time.sleep(0.2)
 
 
-class Application(tornado.web.Application):
+class Application(web.Application):
     def __init__(self):
         handlers = [
-            (r"/", MainHandler),
             (r"/ws-photoresistor", SocketHandler),
         ]
         settings = dict(
