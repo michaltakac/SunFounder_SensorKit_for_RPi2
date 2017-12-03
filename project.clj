@@ -6,6 +6,7 @@
                  [com.andrewmcveigh/cljs-time "0.5.0"]
                  [org.clojure/core.async "0.2.391"]
                  [re-com "2.1.0"]
+                 [jarohen/chord "0.8.1"]
                  [secretary "1.2.3"]]
 
   :plugins [[lein-cljsbuild "1.1.5"]
