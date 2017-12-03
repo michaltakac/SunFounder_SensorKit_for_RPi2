@@ -50,9 +50,6 @@ app = web.Application([
 
 
 if __name__ == '__main__':
-  try:
-    setup()
-    app.listen(8888)
-    ioloop.IOLoop.instance().start()
-  except KeyboardInterrupt:
-    pass
+  setup()
+  app.listen(8888)
+  ioloop.IOLoop.instance().start()
