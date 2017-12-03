@@ -28,12 +28,22 @@ def loop():
         else:
             break
 
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('Client disconnected')
+
 @socketio.on('sensor_start')
 def handle_start_event():
+    print('Sensor started')
     is_playing = True
 
 @socketio.on('sensor_stop')
 def handle_stop_event():
+    print('Sensor stopped')
     is_playing = False
 
 def main():
