@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import logging
 import PCF8591 as ADC
 import RPi.GPIO as GPIO
 import time
@@ -36,6 +37,7 @@ class SocketHandler(websocket.WebSocketHandler):
             cl.remove(self)
 
     def on_message(self, message):
+      logging.info("got message %r", message)
       if message == 'pause':
         isPlaying = False
 
