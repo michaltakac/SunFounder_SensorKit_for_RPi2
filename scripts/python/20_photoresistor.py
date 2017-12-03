@@ -44,15 +44,17 @@ class Worker(object):
         while self.switch:
             self.unit_of_work += 1
 
-            # must call emit from the socket io
-            # must specify the namespace
-            self.socketio.emit("update", {"msg": self.unit_of_work})
-
             print 'Value: ', ADC.read(0)
             self.socketio.emit('sensor_data', {'data': str(ADC.read(0))})
 
             # important to use eventlet's sleep method
-            eventlet.sleep(1)
+            eventlet.sleep(0.5)
+
+    def play(self):
+        """
+        resume the loop
+        """
+        self.switch = True
 
     def stop(self):
         """
@@ -76,9 +78,8 @@ def start_work():
     trigger background thread
     """
 
-    emit("update", {"msg": "starting worker"})
-
     # notice that the method is not called - don't put braces after method name
+    socketio.start_background_task(target=worker.play)
     socketio.start_background_task(target=worker.do_work)
 
 @socketio.on('sensor_stop')
