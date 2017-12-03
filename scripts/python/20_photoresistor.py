@@ -70,7 +70,7 @@ def connect():
 
     global worker
     worker = Worker(socketio)
-    emit("re_connect", {"msg": "connected"}, namespace='/ws-photoresistor')
+    emit("re_connect", {"msg": "connected"})
 
 @socketio.on('sensor_start', namespace='/ws-photoresistor')
 def start_work():
@@ -89,7 +89,7 @@ def stop_work():
     """
 
     worker.stop()
-    emit("update", {"msg": "worker has been stoppped"}, namespace='/ws-photoresistor')
+    emit("update", {"msg": "worker has been stoppped"})
 
 
 def main():
