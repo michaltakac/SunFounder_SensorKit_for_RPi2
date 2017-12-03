@@ -57,20 +57,22 @@ class SocketHandler(websocket.WebSocketHandler):
             cl.remove(self)
 
     def on_message(self, message):
-      LOGGER.debug("got message %r", message)
+      print "got message ${message}"
       if message == 'pause':
         isPlaying = False
+        print "isPlaying? ${isPlaying}"
 
       if message == 'play':
         isPlaying = True
+        print "isPlaying? ${isPlaying}"
 
 
-def main(address=''):
+def main():
     setup()
     tornado.options.parse_command_line()
     app = Application()
-    app.listen(options.port, address)
-    LOGGER.debug('Server listening at http://%s:%d/', address or 'localhost', options.port)
+    app.listen(options.port)
+    print "Server listening at http://localhost:${options.port}/"
     ioloop.IOLoop.current().start()
 
 if __name__ == '__main__':
