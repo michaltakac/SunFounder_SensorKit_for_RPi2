@@ -14,19 +14,10 @@ define("port", default=8888, help="run on the given port", type=int)
 DO = 17
 GPIO.setmode(GPIO.BCM)
 cl = []
-isPlaying = True
 
 def setup():
   ADC.setup(0x48)
   GPIO.setup(DO, GPIO.IN)
-
-
-def loop(ws):
-  status = 1
-  while isPlaying:
-    print 'Value: ', ADC.read(0)
-    ws.write_message(str(ADC.read(0)))
-    time.sleep(0.2)
 
 
 class Application(web.Application):
@@ -41,28 +32,33 @@ class Application(web.Application):
         super(Application, self).__init__(handlers, **settings)
 
 class SocketHandler(websocket.WebSocketHandler):
-    def check_origin(self, origin):
-        return True
+  is_playing = True
 
-    def open(self):
-        if self not in cl:
-            cl.append(self)
-            loop(self)
+  def check_origin(self, origin):
+      return True
 
-    def on_close(self):
-        if self in cl:
-            cl.remove(self)
+  def open(self):
+    if self not in cl:
+      cl.append(self)
+      while SocketHandler.is_playing:
+        print 'Value: ', ADC.read(0)
+        self.write_message(str(ADC.read(0)))
+        time.sleep(0.2)
 
-    def on_message(self, message):
-      self.write_message(message)
-      print message
-      if message == 'pause':
-        isPlaying = False
-        print "isPlaying? ", isPlaying
+  def on_close(self):
+      if self in cl:
+          cl.remove(self)
 
-      if message == 'play':
-        isPlaying = True
-        print "isPlaying? ", isPlaying
+  def on_message(self, message):
+    self.write_message(message)
+    print message
+    if message == 'pause':
+      SocketHandler.is_playing = False
+      print "is_playing? ", SocketHandler.is_playing
+
+    if message == 'play':
+      SocketHandler.is_playing = True
+      print "is_playing? ", SocketHandler.is_playing
 
 
 def main():
