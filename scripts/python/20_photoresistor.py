@@ -11,8 +11,6 @@ from tornado.options import define, options
 
 define("port", default=8888, help="run on the given port", type=int)
 
-LOGGER = logging.getLogger('tornado.application')
-
 DO = 17
 GPIO.setmode(GPIO.BCM)
 cl = []
@@ -39,7 +37,6 @@ class Application(web.Application):
         settings = dict(
             cookie_secret="__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
             xsrf_cookies=True,
-            debug=True,
         )
         super(Application, self).__init__(handlers, **settings)
 
@@ -60,11 +57,11 @@ class SocketHandler(websocket.WebSocketHandler):
       print "got message ${message}"
       if message == 'pause':
         isPlaying = False
-        print "isPlaying? ${isPlaying}"
+        print "isPlaying? ", isPlaying
 
       if message == 'play':
         isPlaying = True
-        print "isPlaying? ${isPlaying}"
+        print "isPlaying? ", isPlaying
 
 
 def main():
@@ -72,7 +69,7 @@ def main():
     tornado.options.parse_command_line()
     app = Application()
     app.listen(options.port)
-    print "Server listening at http://localhost:${options.port}/"
+    print "Server listening at http://localhost:", options.port
     ioloop.IOLoop.current().start()
 
 if __name__ == '__main__':
