@@ -91,6 +91,9 @@ def stop_work():
     worker.stop()
     emit("update", {"msg": "worker has been stoppped"})
 
+@socketio.on('disconnect')
+def handle_disconnect():
+    worker.stop()
 
 def main():
     print "Server listening at http://localhost:8888"
