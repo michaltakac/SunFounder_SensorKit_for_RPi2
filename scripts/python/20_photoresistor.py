@@ -64,11 +64,12 @@ class SocketHandler(websocket.WebSocketHandler):
         isPlaying = True
 
 
-def main():
+def main(address=''):
     setup()
     tornado.options.parse_command_line()
     app = Application()
-    app.listen(options.port)
+    app.listen(options.port, address)
+    LOGGER.debug('Server listening at http://%s:%d/', address or 'localhost', options.port)
     ioloop.IOLoop.current().start()
 
 if __name__ == '__main__':
