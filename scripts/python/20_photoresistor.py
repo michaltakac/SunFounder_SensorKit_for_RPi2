@@ -41,6 +41,7 @@ def handle_start_event():
     print('Sensor started')
     is_playing = True
     print(is_playing)
+    loop()
 
 @socketio.on('sensor_stop')
 def handle_stop_event():
@@ -51,7 +52,6 @@ def handle_stop_event():
 def main():
     print "Server listening at http://localhost:8888"
     setup()
-    loop()
     socketio.run(app, host='0.0.0.0', port=8888)
 
 if __name__ == '__main__':
