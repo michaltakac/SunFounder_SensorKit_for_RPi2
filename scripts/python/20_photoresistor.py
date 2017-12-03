@@ -68,8 +68,6 @@ def connect():
     connect
     """
 
-    global worker
-    worker = Worker(socketio)
     emit("re_connect", {"msg": "connected"})
 
 @socketio.on('sensor_start')
@@ -77,6 +75,9 @@ def start_work():
     """
     trigger background thread
     """
+
+    global worker
+    worker = Worker(socketio)
 
     # notice that the method is not called - don't put braces after method name
     socketio.start_background_task(target=worker.play)
@@ -90,6 +91,10 @@ def stop_work():
 
     worker.stop()
     emit("update", {"msg": "worker has been stoppped"})
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    worker.stop()
 
 def main():
     print "Server listening at http://localhost:8888"
