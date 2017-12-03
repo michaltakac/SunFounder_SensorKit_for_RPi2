@@ -20,10 +20,13 @@ def setup():
   GPIO.setup(DO, GPIO.IN)
 
 def loop():
-    while is_playing:
-        print 'Value: ', ADC.read(0)
-        emit('sensor_data', {'data': str(ADC.read(0))})
-        time.sleep(0.2)
+    while True:
+        if is_playing:
+            print 'Value: ', ADC.read(0)
+            emit('sensor_data', {'data': str(ADC.read(0))})
+            time.sleep(0.2)
+        else:
+            break
 
 @socketio.on('sensor_start')
 def handle_start_event():
