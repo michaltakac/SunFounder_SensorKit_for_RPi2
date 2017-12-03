@@ -52,7 +52,11 @@ class App extends Component {
         layout={{
           width: 800,
           height: 600,
-          title: 'Photoresistor data'
+          title: 'Photoresistor data',
+          yaxis: {
+            title: 'y-axis title',
+            range: [50, 250]
+          }
         }}
       />
     )
