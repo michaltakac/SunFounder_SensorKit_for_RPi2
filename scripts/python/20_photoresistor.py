@@ -34,6 +34,9 @@ class Application(web.Application):
 class SocketHandler(websocket.WebSocketHandler):
   is_playing = True
 
+  def check_origin(self, origin):
+    return True
+
   def open(self):
     self.stream.set_nodelay(True)
     print 'opening %s' % self
