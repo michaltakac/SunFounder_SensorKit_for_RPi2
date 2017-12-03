@@ -21,6 +21,8 @@ def setup():
 
 def loop():
     while True:
+        print(is_playing == True)
+        time.sleep(0.2)
         if is_playing:
             print 'Value: ', ADC.read(0)
             emit('sensor_data', {'data': str(ADC.read(0))})
