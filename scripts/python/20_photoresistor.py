@@ -54,7 +54,8 @@ class SocketHandler(websocket.WebSocketHandler):
             cl.remove(self)
 
     def on_message(self, message):
-      print "got message ${message}"
+      self.write_message(message)
+      print message
       if message == 'pause':
         isPlaying = False
         print "isPlaying? ", isPlaying
