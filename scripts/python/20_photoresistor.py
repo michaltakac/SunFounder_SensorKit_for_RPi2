@@ -48,6 +48,7 @@ class SocketHandler(websocket.WebSocketHandler):
   def on_close(self):
       if self in cl:
           cl.remove(self)
+          SocketHandler.is_playing = False
 
   def on_message(self, message):
     self.write_message(message)
