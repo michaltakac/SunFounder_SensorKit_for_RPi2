@@ -38,8 +38,6 @@ class SocketHandler(websocket.WebSocketHandler):
     return True
 
   def open(self):
-    self.stream.set_nodelay(True)
-    print 'opening %s' % self
     if self not in cl:
       cl.append(self)
       while SocketHandler.is_playing:
@@ -47,24 +45,10 @@ class SocketHandler(websocket.WebSocketHandler):
         self.write_message(str(ADC.read(0)))
         time.sleep(0.2)
 
-  def on_pong(self, data):
-    print 'got pong', data
-
   def on_close(self):
     if self in cl:
         cl.remove(self)
         SocketHandler.is_playing = False
-
-  def on_message(self, message):
-    self.write_message(message)
-    print message
-    if message == 'pause':
-      SocketHandler.is_playing = False
-      print "is_playing? ", SocketHandler.is_playing
-
-    if message == 'play':
-      SocketHandler.is_playing = True
-      print "is_playing? ", SocketHandler.is_playing
 
 
 def main():
