@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Flask Websockets Demo</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+  </head>
+  <body>
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+  </body>
+  <script>
+    $(document).ready(function() {
+      var connectionString = 'http://testpi.local:8888/'
+      console.log('Connecting web socket: '+connectionString)
+      var ws = io.connect(connectionString);
+
+      ws.on('connect', function() {
+        ws.emit('my event', {data: 'I\'m connected!'});
+      });
+      ws.on('sensor_data', function(e) {
+        console.log(e.unit, e.value);
+      });
+      console.log('Registering function clicks')
+      $( "#start" ).on( "click", function() {
+          ws.emit('sensor_start');
+      });
+      $( "#stop" ).on( "click", function() {
+          ws.emit('sensor_stop');
+      });
+    });
+  </script>
+</html>

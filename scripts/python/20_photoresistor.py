@@ -48,7 +48,7 @@ class Worker(object):
             self.socketio.emit('sensor_data', {'unit': self.unit_of_work, 'value': ADC.read(0)})
 
             # important to use eventlet's sleep method
-            eventlet.sleep(0.5)
+            eventlet.sleep(0.05)
 
     def play(self):
         """
