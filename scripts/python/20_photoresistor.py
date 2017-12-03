@@ -4,6 +4,7 @@ import PCF8591 as ADC
 import RPi.GPIO as GPIO
 import time
 from tornado import websocket, web, ioloop
+import tornado.application
 import tornado.options
 import json
 
