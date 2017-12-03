@@ -8,6 +8,7 @@ import json
 DO = 17
 GPIO.setmode(GPIO.BCM)
 cl = []
+isPlaying = True
 
 def setup():
   ADC.setup(0x48)
@@ -16,17 +17,6 @@ def setup():
 
 def loop(ws):
   status = 1
-  isPlaying = True
-
-  def setPlaying(message):
-    if message == 'pause':
-      isPlaying = False
-
-    if message == 'play':
-      isPlaying = False
-
-  ws.on_message(setPlaying)
-
   while isPlaying:
     print 'Value: ', ADC.read(0)
     ws.write_message(str(ADC.read(0)))
@@ -44,6 +34,13 @@ class SocketHandler(websocket.WebSocketHandler):
     def on_close(self):
         if self in cl:
             cl.remove(self)
+
+    def on_message(self, message):
+      if message == 'pause':
+        isPlaying = False
+
+      if message == 'play':
+        isPlaying = True
 
 app = web.Application([
     (r'/ws-photoresistor', SocketHandler),
