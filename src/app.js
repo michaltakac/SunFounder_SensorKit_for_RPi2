@@ -68,6 +68,7 @@ class App extends Component {
 
   renderWebVR () {
     const { data } = this.state
+    //const photoresistorVal = data && data[data.length-1] && Math.abs(data[data.length-1].value)
     const lightIntensity = data && data[data.length-1] ? Math.abs((data[data.length-1].value / 10) - 10) : 2
     return (
       <Scene embedded fog>
@@ -80,18 +81,22 @@ class App extends Component {
         <Entity
           primitive="a-light"
           type="spot"
+          //intensity="4"
           intensity={lightIntensity}
           position="3.31 1.17 -1.98"
           rotation="6.47 -89.84 30"
           penumbra="1"
+          //visible={photoresistorVal > 180}
         />
         <Entity
           primitive="a-light"
           type="spot"
+          //intensity="4"
           intensity={lightIntensity}
           position="3.31 1.17 -4"
           rotation="6.47 -89.84 30"
           penumbra="1"
+          //visible={photoresistorVal > 180}
         />
         <Entity primitive="a-sky" height="2048" radius="30" src="#skyTexture" theta-length="90" width="2048"/>
         <Entity particle-system={{preset: 'snow', particleCount: 2000}}/>
