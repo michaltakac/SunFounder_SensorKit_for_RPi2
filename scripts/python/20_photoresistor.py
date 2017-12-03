@@ -21,12 +21,15 @@ def setup():
 
 def loop():
     while True:
-        print(is_playing == True)
+        @socketio.on('sensor_stop')
+        def handle_stop_event():
+            print('Sensor stopped')
+            break
+
+        print 'Value: ', ADC.read(0)
+        emit('sensor_data', {'data': str(ADC.read(0))})
         time.sleep(0.2)
-        if is_playing:
-            print 'Value: ', ADC.read(0)
-            emit('sensor_data', {'data': str(ADC.read(0))})
-            time.sleep(0.2)
+
 
 @socketio.on('connect')
 def handle_connect():
@@ -39,15 +42,8 @@ def handle_disconnect():
 @socketio.on('sensor_start')
 def handle_start_event():
     print('Sensor started')
-    is_playing = True
-    print(is_playing)
     loop()
 
-@socketio.on('sensor_stop')
-def handle_stop_event():
-    print('Sensor stopped')
-    is_playing = False
-    print(is_playing)
 
 def main():
     print "Server listening at http://localhost:8888"
