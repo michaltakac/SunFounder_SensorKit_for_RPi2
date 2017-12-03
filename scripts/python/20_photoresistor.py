@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+import eventlet
+eventlet.monkey_patch()
+
 import logging
 import PCF8591 as ADC
 import RPi.GPIO as GPIO
@@ -9,40 +12,87 @@ import json
 
 DO = 17
 GPIO.setmode(GPIO.BCM)
-is_playing = False
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app)
+app.config['SECRET_KEY'] = 'secret'
+socketio = SocketIO(app, async_mode='eventlet')
 
 def setup():
   ADC.setup(0x48)
   GPIO.setup(DO, GPIO.IN)
 
-def loop():
-    while True:
-        @socketio.on('sensor_stop')
-        def handle_stop_event():
-            print('Sensor stopped')
-            break
+# our gloabal worker
+workerObject = None
 
-        print 'Value: ', ADC.read(0)
-        emit('sensor_data', {'data': str(ADC.read(0))})
-        time.sleep(0.2)
+class Worker(object):
 
+    switch = False
+    unit_of_work = 0
+
+    def __init__(self, socketio):
+        """
+        assign socketio object to emit
+        """
+        self.socketio = socketio
+        self.switch = True
+
+    def do_work(self):
+        """
+        do work and emit message
+        """
+
+        while self.switch:
+            self.unit_of_work += 1
+
+            # must call emit from the socket io
+            # must specify the namespace
+            self.socketio.emit("update", {"msg": self.unit_of_work})
+
+            print 'Value: ', ADC.read(0)
+            self.socketio.emit('sensor_data', {'data': str(ADC.read(0))})
+
+            # important to use eventlet's sleep method
+            eventlet.sleep(1)
+
+    def stop(self):
+        """
+        stop the loop
+        """
+        self.switch = False
 
 @socketio.on('connect')
-def handle_connect():
-    print('Client connected')
+def connect():
+    """
+    connect
+    """
+
+    global worker
+    worker = Worker(socketio)
+    emit("re_connect", {"msg": "connected"})
+
+@socketio.on('sensor_start')
+def start_work():
+    """
+    trigger background thread
+    """
+
+    emit("update", {"msg": "starting worker"})
+
+    # notice that the method is not called - don't put braces after method name
+    socketio.start_background_task(target=worker.do_work)
+
+@socketio.on('sensor_stop')
+def stop_work():
+    """
+    trigger background thread
+    """
+
+    worker.stop()
+    emit("update", {"msg": "worker has been stoppped"})
 
 @socketio.on('disconnect')
 def handle_disconnect():
     print('Client disconnected')
-
-@socketio.on('sensor_start')
-def handle_start_event():
-    print('Sensor started')
-    loop()
 
 
 def main():
