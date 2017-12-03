@@ -36,7 +36,7 @@ def handle_stop_event():
 def main():
     setup()
     loop()
-    socketio.run(app, host='localhost', port=8888)
+    socketio.run(app, host='0.0.0.0', port=8888)
     print "Server listening at http://localhost:8888"
 
 if __name__ == '__main__':
